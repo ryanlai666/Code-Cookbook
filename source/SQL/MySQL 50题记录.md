@@ -493,6 +493,35 @@ from (select a.s_id, sum(a.s_score) / count(a.c_id) as '平均成绩'
       having count(a.s_id) >= 2) as p,
      student as s
 where s.s_id = p.s_id;
+
+
+select q.genre, s.movie_id, q.平均成绩
+from (select a.genre
+      from movies.movies as a
+      where a.renting_price < 2
+      group by a.genre
+      having count(a.genre) >= 2) as p,
+      (select a.genre, avg(a.renting_price) as 平均成绩
+      from movies.movies as a
+      group by a.genre
+      ) as q,
+     movies.movies as s
+where q.genre = p.genre and s.genre = p.genre;
+
+
+select q.s_id, s.s_name, q.平均成绩
+from (select a.s_id
+      from score as a
+      where a.s_score < 60
+      group by s_id
+      having count(a.s_id) >= 2) as p,
+      (select a.s_id,  avg(a.s_score) as '平均成绩'
+      from score as a
+      group by s_id
+      ) as q,
+     student as s
+where q.s_id = p.s_id and s.s_id = p.s_id;
+
 ~~~
 
 16、检索"01"课程分数小于60，按分数降序排列的学生信息
